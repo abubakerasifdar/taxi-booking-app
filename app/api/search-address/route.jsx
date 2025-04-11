@@ -20,6 +20,7 @@ export async function GET(request) {
     url.searchParams.append('session_token', sessionToken);
     url.searchParams.append('language', 'en');
     url.searchParams.append('types', 'address,place,neighborhood,locality');
+    url.searchParams.append('limit', '10');
 
     const response = await fetch(url, {
       headers: { 'Content-Type': 'application/json' }

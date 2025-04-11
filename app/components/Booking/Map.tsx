@@ -2,7 +2,7 @@ import React from 'react'
 
 const Map = () => {
   return (
-    <div className="bg-green-500">Map</div>
+    <div className="border-2 border-gray-700 h-screen flex justify-center items-center">Map</div>
   )
 }
 
