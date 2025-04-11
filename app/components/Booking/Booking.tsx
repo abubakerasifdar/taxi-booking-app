@@ -7,11 +7,14 @@ const Booking = () => {
   return (
     <div className="flex p-2 gap-2  h-screen">
       <div className="flex flex-col gap-4 basis-1/3">
-       <AutoComplete2 />
+        <AutoComplete2 />
         <Car />
         <Payment />
+        <div className=" hover:bg-gray-600 cursor-pointer w-full p-2 bg-gray-800 text-white text-center">
+          Book Now
+        </div>
       </div>
-      <div   className="basis-2/3" >
+      <div className="basis-2/3">
         <Map />
       </div>
     </div>
