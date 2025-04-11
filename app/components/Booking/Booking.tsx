@@ -6,7 +6,7 @@ import Payment from "./Payment";
 import Map from "./Map";
 const Booking = () => {
   return (
-    <div className="flex  h-screen">
+    <div className="flex p-2  h-screen">
       <div className="flex flex-col gap-4 basis-1/3">
         <AutoComplete />
         <AutoComplete2 />
