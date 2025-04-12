@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 
 const Payment = () => {
-  const payment = ["visa", "stripe", "wise", "cash", "wallet", "bank"];
+  const payment = ["Cash", "Card",   "wallet", "bank"];
   const [activePayment, setActivePayment] = useState();
   return (
     <div className="p-2 flex flex-col border-2 border-gray-700">
