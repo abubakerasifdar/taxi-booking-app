@@ -1,10 +1,9 @@
-"use client"
+"use client";
 import Navbar from "./components/Layout/Navbar";
 import Booking from "./components/Booking/Booking";
 import Footer from "./components/Layout/Footer";
 import { useState, useEffect } from "react";
 import "./globals.css";
-
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState();
@@ -12,10 +11,12 @@ export default function Home() {
     getUserLocation();
   }, []);
   const getUserLocation = () => {
-    navigator.geolocation.getCurrentPosition(function(pos){
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       console.log(pos);
-      clg
-    })
+      console.log(pos.coords.latitude);
+      console.log(pos.coords.longitude);
+    });
   };
   return (
     <div>
