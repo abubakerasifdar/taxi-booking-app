@@ -2,11 +2,17 @@
 import Navbar from "./components/Layout/Navbar";
 import Booking from "./components/Booking/Booking";
 import Footer from "./components/Layout/Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./globals.css";
-
+import { UserLocationContext } from "./../context/UserLocationContext";
+import { SourceDestinationCoordinateContext } from "./../context/SourceDestinationCoordinateContext";
+import { DestinationCoordinateContext } from './../context/DestinationCoordinateContext';
+import { DirectionDataContext } from './../context/DirectionDataContext';
 export default function Home() {
   const [userLocation, setUserLocation] = useState();
+  const [sourceCoordinates, setSourceCoordinates] = useState([]);
+  const [destinationCoordinates, setDestinationCoordinates] = useState([]);
+  const [directionData, setDirectionData] = useState([]);
   useEffect(() => {
     getUserLocation();
   }, []);
@@ -19,10 +25,22 @@ export default function Home() {
     });
   };
   return (
-    <div>
-      <Navbar />
-      <Booking />
-      <Footer />
-    </div>
+    <UserLocationContext.Provider value={{ userLocation, setUserLocation }}>
+      <SourceDestinationCoordinateContext.Provider
+        value={{ sourceCoordinates, setSourceCoordinates }}
+      >
+        <DestinationCoordinateContext.Provider
+          value={{ destinationCoordinates, setDestinationCoordinates }}
+        >
+        <DirectionDataContext value={{directionData, setDirectionData}}>
+          <div>
+            <Navbar />
+            <Booking />
+            <Footer />
+          </div>
+          </ DirectionDataContext>
+        </DestinationCoordinateContext.Provider>
+      </SourceDestinationCoordinateContext.Provider>
+    </UserLocationContext.Provider>
   );
 }

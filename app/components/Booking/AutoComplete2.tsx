@@ -2,7 +2,9 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-
+import { useContext } from "react";
+import { SourceDestinationCoordinateContext } from "./../../../context/SourceDestinationCoordinateContext";
+import { DestinationCoordinateContext } from './../../../context/DestinationCoordinateContext';
 const AutoComplete2 = () => {
   // handle states
   const [source, setSource] = useState("");
@@ -13,19 +15,26 @@ const AutoComplete2 = () => {
 
   const [activeSearchBox, setActiveSearchBox] = useState("source");
 
+  const { sourceCoordinates, setSourceCoordinates } = useContext(
+    SourceDestinationCoordinateContext
+  );
+  const { destinationCoordinates, setDestinationCoordinates } = useContext(
+    DestinationCoordinateContext
+  );
+
   // handle useEffect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (activeSearchBox === "source" && source) {
-        getsearchedAddress(source, setSourceSuggestion);
-      } else if (activeSearchBox === "destination" && destination) {
-        getsearchedAddress(destination, setDestinationSuggestion);
-      }
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [source, destination, activeSearchBox]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (activeSearchBox === "source" && source) {
+  //       getsearchedAddress(source, setSourceSuggestion);
+  //     } else if (activeSearchBox === "destination" && destination) {
+  //       getsearchedAddress(destination, setDestinationSuggestion);
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [source, destination, activeSearchBox]);
   // handle apis
   const getsearchedAddress = async (query, setSuggestions) => {
     try {
@@ -39,6 +48,31 @@ const AutoComplete2 = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const onSourceAddressClick = async (items) => {
+    setSource(items?.name);
+    setSourceSuggestion([]);
+    const res = await fetch(
+      `https://api.mapbox.com/search/searchbox/v1/retrieve/${items.mapbox_id}?session_token=test_session_123&access_token=pk.eyJ1IjoiYWJ1YmFrYXJhc2lmZGFyMTAwIiwiYSI6ImNtOWI1bGI4ZDA4cmEybHF3OXZyaXVxMGYifQ.46-nCFy38os_LdphJ6FPlg`
+    );
+    const result = await res.json();
+    setSourceCoordinates({
+      lng: result?.features[0]?.geometry?.coordinates[0],
+      lat: result?.features[0]?.geometry?.coordinates[1],
+    });
+  };
+  const onDestinationAddressClick = async (items) => {
+    setDestination(items?.name);
+    setDestinationSuggestion([]);
+    const res = await fetch(
+      `https://api.mapbox.com/search/searchbox/v1/retrieve/${items.mapbox_id}?session_token=test_session_123&access_token=pk.eyJ1IjoiYWJ1YmFrYXJhc2lmZGFyMTAwIiwiYSI6ImNtOWI1bGI4ZDA4cmEybHF3OXZyaXVxMGYifQ.46-nCFy38os_LdphJ6FPlg`
+    );
+    const result = await res.json();
+
+    setDestinationCoordinates({
+      lng: result?.features[0]?.geometry?.coordinates[0],
+      lat: result?.features[0]?.geometry?.coordinates[1],
+    });
   };
 
   return (
@@ -60,8 +94,7 @@ const AutoComplete2 = () => {
             {sourceSuggestion.suggestions.map((items, index) => (
               <h1
                 onClick={() => {
-                  setSource(items?.name);
-                  setSourceSuggestion([]);
+                  onSourceAddressClick(items);
                 }}
                 className="p-2 w-auto cursor-pointer hover:bg-gray-400"
                 key={index}
@@ -90,8 +123,7 @@ const AutoComplete2 = () => {
             {destinationSuggestion.suggestions.map((items, index) => (
               <h1
                 onClick={() => {
-                  setDestination(items?.name);
-                  setDestinationSuggestion([]);
+                  onDestinationAddressClick(items);
                 }}
                 className="p-2 w-auto cursor-pointer hover:bg-gray-400"
                 key={index}
